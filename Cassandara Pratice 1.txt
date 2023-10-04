@@ -1,0 +1,122 @@
+S1.create keyspace hr with replication = {'class': 'SimpleStrategy', 'replication_factor':1};
+enter
+S2.use hr;
+
+Create a table Cassandra:
+create table emp2 
+(ename varchar, 
+dname varchar, 
+hiredate timestamp, 
+salary varint, 
+primary key((dname),ename));
+
+
+Insert:
+insert into emp2(ename, dname, hiredate, salary)
+values('Jeff', 'IT', '2019-02-03', 60000);
+insert into emp2(ename, dname, hiredate, salary)
+values('Susan', 'HR', '2016-01-03', 70000);
+insert into emp2(ename, dname, hiredate, salary)
+values('Emma', 'IT', '2017-11-03', 80000);
+insert into emp2(ename, dname, hiredate, salary)
+values('Bob', 'IT', '2018-01-03', 70000);
+
+Index:
+create index index_name on tablename(column name);
+
+Retrieve rows not primary key: 
+- add allow filtering after the select statement
+
+-- Return employees who works at IT department
+select * from emp2 where dname = 'IT';
+
+-- Return employees hired after Feb 1st 2019 (use allow filtering)
+select * from emp2 where hiredate > '2019-01-02' allow filtering;
+
+-- Return employees hired after Feb 1st 2019 (use index)
+create index idx_emp2_hiredate on emp2(hiredate);
+select * from emp2 where hiredate > '2019-01-02';
+
+-- Return average salary of all employees
+select avg(salary) from emp2;
+-- for aggregates there is no need to use allow filtering
+
+create table proj1
+(pname varchar,
+startdate timestamp,
+enames set<text>,
+primary key((pname), startdate));
+
+Insert:
+insert into proj1(pname, startdate, enames) values
+('umbc library', '2019-01-11', {'Jeff', 'Emma'});
+
+insert into proj1(pname, startdate, enames) values
+('umbc student record', '2019-03-01', {'Jeff', 'Bob'});
+
+Map Example:
+create table proj4
+(pname varchar, 
+startdate timestamp, 
+emps map<text,text>,
+primary key (pname, startdate));
+
+List Example:
+create table emp5
+(dname varchar,
+ename varchar,
+hiredate timestamp,
+salary varint,
+proj list<text>,
+primary key((dname),ename));
+
+insert into emp5(dname, ename, hiredate, salary, proj) values 
+('IT', 'Jeff', '2019-02-03', 60000, ['UMBC library', 'UMBC student record']);
+
+insert into emp5(dname, ename, hiredate, salary) values 
+('HR', 'Susan', '2016-01-03', 70000);
+
+insert into  emp5(dname, ename, hiredate, salary, proj) values 
+('it', 'emma', '2017-11-03', 80000, ['UMBC library']);
+
+insert into  emp5(dname, ename, hiredate, salary, proj) values 
+('it', 'bob', '2018-01-03', 70000, ['UMBC student record']);
+
+
+--- need to fix --
+create table cust1
+(cid int,
+cname varchar,
+pnames list<text>,
+tdates list<timestamp>,
+primary key((cname), cid));
+
+insert into cust1(cid, cname, pnames, tdates) values
+(1, 'Jeff', ['iPhone 10', 'Harry Potter'], ['2019-02-01', '2019-03-01']);
+
+
+insert into cust1(cid, cname, pname, tdate) values
+(2, 'Alice', ['iPhone 10', 'Levi Jeans'], ['2019-01-01']);
+
+
+create table prod1
+(pid int,
+pname varchar,
+price float,
+cnames list<text>,
+tdates list<timestamp>,
+primary key((pname),pid));
+
+insert into prod1(pid, pname, price, cname, tdate) values
+(1, 'iPhone 10', 1000, 'Jeff', '2019-02-01');
+
+insert into prod1(pid, pname, price, cname, tdate) values
+(2, 'Harry Potter', 100, 'Jeff', '2019-03-01');
+
+insert into prod1(pid, pname, price, cname, tdate) values
+(1, 'iPhone 10', 1000, 'Alice', '2019-01-01');
+
+insert into prod1(pid, pname, price, cname, tdate) values
+(5, 'Levi Jeans', 60, 'Alice', '2019-03-01');
+
+
