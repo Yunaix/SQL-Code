@@ -1,8 +1,1 @@
-<?xml version = '1.0' encoding = 'UTF-8'?>
-<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="Relational Lab 1 Model" id="08B706BC-8C94-E0CE-0D56-ECCFD04A2D96" version="3.5">
-<createdBy>eunic</createdBy>
-<createdTime>2023-02-01 15:45:57 UTC</createdTime>
-<ownerDesignName>Relational Lab 1 Model</ownerDesignName>
-<capitalNames>false</capitalNames>
-<designId>08B706BC-8C94-E0CE-0D56-ECCFD04A2D96</designId>
-</OSDM_Design>
+
